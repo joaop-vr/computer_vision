@@ -25,9 +25,6 @@ def main():
     save_features(train_features, args.output + "train_features.json")
     save_features(test_features, args.output + "test_features.json")
 
-'''
-Devolve um dicionário.....................................................
-'''
 def extract_features(dataloader, filters_config, window_size):
     features = {}
 
@@ -45,15 +42,17 @@ def extract_features(dataloader, filters_config, window_size):
     return features
 
 def append_on_dict(features, image_path, filter_name, kernel, filtro_features, label):
-    if int(kernel) not in features:
-        features[int(kernel)] = {}
+    if str(image_path) not in features:
+        features[str(image_path)] = {}
+        features[str(image_path)]["label"] = int(label)
+    
+    if int(kernel) not in features[str(image_path)]:
+        features[str(image_path)][int(kernel)] = {}
 
-    if str(filter_name) not in features[int(kernel)]:
-        features[int(kernel)][str(filter_name)] = {}
-
-    features[int(kernel)][str(filter_name)][str(image_path)] = {}
-    features[int(kernel)][str(filter_name)][str(image_path)]["features"] = np.array(filtro_features, dtype=np.float32).tolist()
-    features[int(kernel)][str(filter_name)][str(image_path)]["label"] = int(label)
+    if str(filter_name) not in features[str(image_path)][int(kernel)]:
+        features[str(image_path)][int(kernel)][str(filter_name)] = {}
+    
+    features[str(image_path)][int(kernel)][str(filter_name)]["features"] = np.array(filtro_features, dtype=np.float32).tolist()
 
     return features
 
@@ -91,6 +90,7 @@ def save_args(args):
     dict["split_factor"] = args.split_factor
     dict["grayscale"] = args.grayscale
     dict["filters_config"] = args.filters_config
+    dict["resize_size"] = args.resize_size
     dict["window_size"] = args.window_size
 
     json.dump(dict, open(args.output + "args.json", "w"))

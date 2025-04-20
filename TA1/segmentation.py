@@ -42,7 +42,6 @@ def segment_images(features_json, output_dir, limiar, resize_size, window_size):
             for region_idx in range(len(features)):
                 region = features[region_idx]
 
-                # calculando distância euclidiana
                 for other_region_idx in range(len(features)):
                     if region_idx == other_region_idx or region_classes[other_region_idx] != -1:
                         continue
@@ -63,9 +62,9 @@ def segment_images(features_json, output_dir, limiar, resize_size, window_size):
                     max_i += 1
                     region_classes[region_class] = max_i
             
-            save_image(output_dir, image_path, region_classes, resize_size, window_size)
+            save_image(output_dir, image_path, region_classes, resize_size, window_size, kernel)
 
-def save_image(output_dir, image_path, region_classes, resize_size, window_size):
+def save_image(output_dir, image_path, region_classes, resize_size, window_size, kernel):
     image_name = os.path.basename(image_path)
     image_class = image_path.split("/")[-2]
 
@@ -99,7 +98,7 @@ def save_image(output_dir, image_path, region_classes, resize_size, window_size)
     combined_image.paste(original_image, (0, 0))
     combined_image.paste(segmented_pil, (resize_size, 0))
 
-    combined_image.save(os.path.join(class_dir, image_name))
+    combined_image.save(f"{class_dir}/{str(kernel)}_{image_name}", "JPEG")
 
 def get_shape_info(features_dir):
     info_json = json.load(open(features_dir + "args.json", "r"))

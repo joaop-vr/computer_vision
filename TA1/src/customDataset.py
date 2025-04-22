@@ -55,7 +55,7 @@ class customDataset(Dataset):
                     self.class_to_idx = {cls_name: idx for idx, cls_name in enumerate(class_names)}
                     self.targets = [self.class_to_idx[img.split("/")[-3]] for img in self.images_paths]
 
-                elif mode == "val":
+                elif mode == "test":
                     with open(f"{dataset_path}val_annotations.txt", "r") as f:
                         lines = f.readlines()
 

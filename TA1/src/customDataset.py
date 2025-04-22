@@ -5,14 +5,24 @@ from math import ceil
 from PIL import Image
 
 bob_esponja_class_map = {
-    "bob_esponja": 0,
-    "garry": 1,
-    "larry": 2,
-    "lula_molusco": 3,
-    "patrick": 4,
-    "plankton": 5,
-    "sandy": 6,
-    "siriguejo": 7,
+    #"bob_esponja": 0,
+    #"garry": 1,
+    #"larry": 2,
+    #"lula_molusco": 3,
+    #"patrick": 4,
+    #"plankton": 5,
+    #"sandy": 6,
+    #"siriguejo": 7,
+    "spongebob_squarepants": 0,
+    "gary_the_snail": 1,
+    "squidward_tentacles": 2,
+    "patrick_star": 3,
+    "sheldon_j_plankton": 4,
+    "sandy_cheeks": 5,
+    "eugene_h_krabs": 6,
+    "karen_plankton": 7,
+    "mrs_puff": 8,
+    "pearl_krabs": 9,
 }
 
 '''
@@ -31,14 +41,14 @@ class customDataset(Dataset):
 
         match dataset_type:
             case "bob_esponja":
-                images_paths_ = sorted(glob(f"{dataset_path}/**/*.JPEG", recursive=True))
+                images_paths_ = sorted(glob(f"{dataset_path}**/*.JPEG", recursive=True))
                 targets_ = [bob_esponja_class_map[str(image.split("/")[-2])] for image in images_paths_]
 
                 for class_name in os.listdir(dataset_path):
                     n_images = len(os.listdir(f"{dataset_path}{class_name}"))
                     images_split_factor = ceil(n_images * split_factor)
 
-                    class_images_paths = sorted(glob(f"{dataset_path}/{class_name}/*.JPEG", recursive=True))
+                    class_images_paths = sorted(glob(f"{dataset_path}{class_name}/*.JPEG", recursive=True))
                     class_targets = [bob_esponja_class_map[class_name]] * len(class_images_paths)
 
                     if self.mode == "train":
@@ -56,7 +66,7 @@ class customDataset(Dataset):
                     self.targets = [self.class_to_idx[img.split("/")[-3]] for img in self.images_paths]
 
                 elif mode == "test":
-                    with open(f"{dataset_path}/val/val_annotations.txt", "r") as f:
+                    with open(f"{dataset_path}val/val_annotations.txt", "r") as f:
                         lines = f.readlines()
 
                     image_name_to_class = {}

@@ -50,13 +50,13 @@ class customDataset(Dataset):
 
             case "tiny-imagenet":
                 if mode == "train":
-                    self.images_paths = glob(f"{dataset_path}/**/*.JPEG", recursive=True)
+                    self.images_paths = glob(f"{dataset_path}train/**/*.JPEG", recursive=True)
                     class_names = sorted(set(img.split("/")[-3] for img in self.images_paths))
                     self.class_to_idx = {cls_name: idx for idx, cls_name in enumerate(class_names)}
                     self.targets = [self.class_to_idx[img.split("/")[-3]] for img in self.images_paths]
 
                 elif mode == "test":
-                    with open(f"{dataset_path}val_annotations.txt", "r") as f:
+                    with open(f"{dataset_path}/val/val_annotations.txt", "r") as f:
                         lines = f.readlines()
 
                     image_name_to_class = {}
@@ -67,7 +67,7 @@ class customDataset(Dataset):
                     class_names = sorted(set(image_name_to_class.values()))
                     self.class_to_idx = {cls_name: idx for idx, cls_name in enumerate(class_names)}
                     
-                    self.images_paths = glob(f"{dataset_path}/**/*.JPEG", recursive=True)
+                    self.images_paths = glob(f"{dataset_path}val/**/*.JPEG", recursive=True)
                     self.targets = [self.class_to_idx[image_name_to_class[img.split("/")[-1]]] for img in self.images_paths]
 
     def __len__(self):

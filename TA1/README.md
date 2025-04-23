@@ -66,18 +66,18 @@ Este programa possui as seguintes flags:
 
 - `--grayscale`:  Se `true`, converte a imagem para tons de cinza.
 
-- `--filters_config`: Caminho para o arquivo `.yaml` com os filtros.
+- `--filters_config`: Caminho para o arquivo `.yaml` com os filtros. Encontrado em src/
 
 - `--resize_size`: Tamanho para redimensionar as imagens.
 
 - `--window_size`: Tamanho da janela para aplicar os filtros.
 
-- `--split_factor`
+- `--split_factor`: Porcentagem de imagens usadas para treinamento. Não aplicado na segmentação por textura (qualquer valor entre 0 e 1 serve).
 
 #### Exemplo de linha de comando:
 
 ```
-python3 extract_textures.py --dataset ~/Pictures/bob_esponja_dataset/ --output ./output --grayscale false --filters_config src/filters.yaml --resize_size 512 --window_size 32 --split_factor 0.4
+python3 extract_textures.py --dataset ~/Pictures/bob_esponja_dataset/ --output ./output --grayscale false --filters_config src/filters.yaml --resize_size 512 --window_size 32 --split_factor 0.7
 ```
 
 ### 2. Segmentação por Textura
@@ -96,6 +96,22 @@ Utilize o script segmentation.py para segmentar as imagens com base nas texturas
 
 ```
 python3 segmentation.py --features_dir ./output --output ./output_segmented --limiar 0.2
+```
+
+### 3. Classificação por Texutra (Extra)
+
+Utilize o sript classify.py para classificar as imagens com base nas texturas extraídas. split_factor é aplicado aqui.
+
+**Parâmetros:**
+
+- `--features_dir`: Caminho para os arquivos de características gerados anteriormente.
+
+- `--knn_factor`: Número de vizinhos (k) usado para decidir a classe da imagem 
+
+#### Exemplo de linha de comando:
+
+```
+python3 classify.py --features_dir ./output --knn_factor 1
 ```
 
 ## Autores

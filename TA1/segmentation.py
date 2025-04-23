@@ -74,12 +74,9 @@ def save_image(output_dir, image_path, region_classes, resize_size, window_size,
     segmented_image = np.zeros((resize_size, resize_size), dtype=np.uint8)
 
     idx = 0
-    print(region_classes)
     for i in range(0, resize_size, window_size):
         for j in range(0, resize_size, window_size):
             region_class = region_classes[idx]
-            print(region_class)
-            print(i, i+window_size, j, j+window_size)
             segmented_image[i:i+window_size, j:j+window_size] = region_class
             idx += 1
 

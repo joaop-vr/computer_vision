@@ -1,36 +1,20 @@
 # Segmentação por Textura
 
-Neste trabalho criamos um sistema para segmentar imagens por textura.
-Para isso, usamos um conjunto de imagens dos personagens do desenho Bob Esponja. A escolha se deu pela grande variedade de texturas presente nos personagens, assim é possível avaliar o programa com maior amplitude de aplicação.
-Aqui são aplicados filtros horizontal, vertical, diagonal 45°, diagonal 135° e circular para os tamanhos 3, 5 e 7.
+Este projeto implementa um sistema de segmentação de imagens com base em textura, usando filtros direcionais aplicados em múltiplas escalas. O objetivo é agrupar regiões semelhantes em termos de textura, utilizando métodos clássicos de visão computacional. Para fins de teste, utilizamos um conjunto de imagens dos personagens do desenho Bob Esponja, devido à diversidade de texturas presentes em suas representações.
 
-## Estruturas de dados
+## Filtros Utilizados
 
-O programa é especificado para a estrutura de diretórios criada para o **Dataset Bob Esponja**, e pode ser alterado e ajustado para diferentes conjuntos de dados por meio do programa `texture_segmentation/TA1/src/customDataset.py`. O Dataset segue a seguinte estrutura de diretórios:
-- ***bob_esponja_dataset***
-    - **eugene_h_krabs**
-        - imagens
-    - **karen_plankton**
-        - imagens
-    - **patrick_star**
-        - imagens
-    - **sandy_cheeks**
-        - imagens
-    - **spongebob_squarepants**
-        - imagens
-    - **gary_the_snail**
-        - imagens
-    - **mrs_puff**
-        - imagens
-    - **pearl_krabs**
-        - imagens
-    - **sheldon_j_plankton**
-        - imagens
-    - **squidward_tentacles**
-        - imagens
+Foram aplicados filtros com as orientações Horizontal, Vertical, Diagonal 45°, Diagonal 135° e Circular.
+Os filtros são usados em três escalas: 3x3, 5x5 e 7x7.
+A estrutura dos filtros deve ser definida em um arquivo .yaml, como `texture_segmentation/TA1/src/filters.yaml`, com os seguintes campos:
 
-Além disso, depende de um arquivo que descreva os filtros a serem utilizados. Esse arquivo deve seguir o padrão estabelecido no trabalho pelo arquivo `texture_segmentation/TA1/src/filters.yaml`.
+```
 - **filtros**
+    - horizontal
+    - vertical
+    - diagonal_45
+    - diagonal_135
+    - circular
 - **horizontal**
     - kernels
     - filtros
@@ -46,47 +30,69 @@ Além disso, depende de um arquivo que descreva os filtros a serem utilizados. E
 - **circular**
     - kernels
     - filtros
+```
 
-## Como rodar o programa
+Cada filtro deve conter os kernels correspondentes.
 
-Para rodar o programa corretamente, primeiro é preciso extrair as texturas das imagens, para isso é necessário o programa `extract_textures.py`.
+## Estruturas de dados
+
+O programa é especificado para a estrutura de diretórios criada para o **Dataset Bob Esponja** encontrado em `texture_segmentation/TA1/bob_esponja_dataset/`, e pode ser alterado e ajustado para diferentes conjuntos de dados por meio do programa `texture_segmentation/TA1/src/customDataset.py`. O sistema espera que as imagens estejam organizadas conforme a estrutura abaixo:
+
+```
+bob_esponja_dataset/
+├── eugene_h_krabs/
+├── gary_the_snail/
+├── karen_plankton/
+├── mrs_puff/
+├── patrick_star/
+├── pearl_krabs/
+├── sandy_cheeks/
+├── sheldon_j_plankton/
+├── spongebob_squarepants/
+└── squidward_tentacles/
+```
+    
+## Como Executar
+
+### 1. Extração de Texturas
+
+Use o script `extract_textures.py` para aplicar os filtros e extrair as características de textura das imagens.
 Este programa possui as seguintes flags:
 
-- --dataset
-Indica o diretório onde estão as imagens a serem utilizadas pelo programa. Neste caso, usamos o dataset com os personagens de Bob Esponja que pode ser encontrado em `texture_segmentation/TA1/bob_esponja_dataset/`.
+**Parâmetros:**
+- `--dataset`: Caminho para o diretório do dataset.
 
-- --output
-Indica o diretório onde devem ser armazenados os arquivos gerados pelo programa. Não é necessário ser um diretório pré-existente
+- `--output`: Diretório de saída dos arquivos gerados. Não é necessário ser um diretório existente.
 
-- --grayscale
+- `--grayscale`:  Se `true`, converte a imagem para tons de cinza.
 
-- --filters_config
-Caminho para o arquivo .yaml com os filtros a serem utilizados. 
+- `--filters_config`: Caminho para o arquivo `.yaml` com os filtros.
 
-- --resize_size
+- `--resize_size`: Tamanho para redimensionar as imagens.
 
-- --window_size
-Tamanho em bytes da janela a ser utilizada ao aplicar os filtros.
+- `--window_size`: Tamanho da janela para aplicar os filtros.
 
-- --split_factor
+- `--split_factor`
 
-### Exemplo de linha de comando:
+#### Exemplo de linha de comando:
 
 ```
 python3 extract_textures.py --dataset ~/Pictures/bob_esponja_dataset/ --output ./output --grayscale false --filters_config src/filters.yaml --resize_size 512 --window_size 32 --split_factor 0.4
 ```
 
-Então, é necessário segmentar as imagens com base nas texturas extraídas, para isso use o programa `segmentation.py`, que possui as flags:
-- --features_dir
-Indica o diretório onde estão as características extraídas, ou seja, os arquivos de saída gerados pelo programa anterior.
+### 2. Segmentação por Textura
 
-- --output
-Diretório destino das imagens segmentadas.
+Utilize o script segmentation.py para segmentar as imagens com base nas texturas extraídas.
 
-- --limiar
-Indica o valor máximo de diferença para duas janelas pertencerem à mesma classe.
+**Parâmetros:**
 
-### Exemplor de linha de comando:
+- `--features_dir`: Caminho para os arquivos de características gerados anteriormente.
+
+- `--output`: Diretório onde serão salvas as imagens segmentadas.
+
+- `--limiar`: Valor máximo de diferença para considerar duas regiões como pertencentes à mesma classe.
+
+#### Exemplo de linha de comando:
 
 ```
 python3 segmentation.py --features_dir ./output --output ./output_segmented --limiar 0.2

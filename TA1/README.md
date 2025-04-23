@@ -40,16 +40,14 @@ O programa é especificado para a estrutura de diretórios criada para o **Datas
 
 ```
 bob_esponja_dataset/
-├── eugene_h_krabs/
-├── gary_the_snail/
-├── karen_plankton/
-├── mrs_puff/
-├── patrick_star/
-├── pearl_krabs/
-├── sandy_cheeks/
-├── sheldon_j_plankton/
-├── spongebob_squarepants/
-└── squidward_tentacles/
+├── bob_esponja/
+├── garry/
+├── larry/
+├── lula_molusco/
+├── patrick/
+├── plankton/
+├── sandy/
+└── siriguejo/
 ```
     
 ## Como Executar
@@ -100,7 +98,7 @@ python3 segmentation.py --features_dir ./output --output ./output_segmented --li
 
 ### 3. Classificação por Texutra (Extra)
 
-Utilize o sript classify.py para classificar as imagens com base nas texturas extraídas. split_factor é aplicado aqui.
+Utilize o sript classify.py para classificar as imagens com base nas texturas extraídas. split_factor é aplicado aqui. Além disso, este código aceita o dataset tiny-imagenet, que conta com 100 mil imagens para treinamento entre 200 classes e, para cada uma delas, 50 imagens de teste.
 
 **Parâmetros:**
 

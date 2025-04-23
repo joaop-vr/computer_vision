@@ -5,24 +5,14 @@ from math import ceil
 from PIL import Image
 
 bob_esponja_class_map = {
-    #"bob_esponja": 0,
-    #"garry": 1,
-    #"larry": 2,
-    #"lula_molusco": 3,
-    #"patrick": 4,
-    #"plankton": 5,
-    #"sandy": 6,
-    #"siriguejo": 7,
-    "spongebob_squarepants": 0,
-    "gary_the_snail": 1,
-    "squidward_tentacles": 2,
-    "patrick_star": 3,
-    "sheldon_j_plankton": 4,
-    "sandy_cheeks": 5,
-    "eugene_h_krabs": 6,
-    "karen_plankton": 7,
-    "mrs_puff": 8,
-    "pearl_krabs": 9,
+    "bob_esponja": 0,
+    "garry": 1,
+    "larry": 2,
+    "lula_molusco": 3,
+    "patrick": 4,
+    "plankton": 5,
+    "sandy": 6,
+    "siriguejo": 7,
 }
 
 '''

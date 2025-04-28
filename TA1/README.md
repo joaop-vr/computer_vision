@@ -68,7 +68,7 @@ Este programa possui as seguintes flags:
 
 - `--resize_size`: Tamanho para redimensionar as imagens.
 
-- `--window_size`: Tamanho da janela para aplicar os filtros.
+- `--window_size`: Tamanho da janela para aplicar os filtros. O tamanho escolhido deve ser igual ou superior a 32 e divisor de 512.
 
 - `--split_factor`: Porcentagem de imagens usadas para treinamento. Não aplicado na segmentação por textura (qualquer valor entre 0 e 1 serve).
 

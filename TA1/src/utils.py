@@ -25,7 +25,7 @@ def get_dataloaders(args, transformer, dataset_type):
         batch_size=1,
         shuffle=False, # Não faz diferença nesse problema
         num_workers=4,
-        pin_memory=True
+        pin_memory=False
     )
 
     test_dataloader = torch.utils.data.DataLoader(
@@ -33,7 +33,7 @@ def get_dataloaders(args, transformer, dataset_type):
         batch_size=1,
         shuffle=False,
         num_workers=4,
-        pin_memory=True
+        pin_memory=False
     )
 
     return train_dataloader, test_dataloader

@@ -75,7 +75,7 @@ Este programa possui as seguintes flags:
 #### Exemplo de linha de comando:
 
 ```
-python3 extract_textures.py --dataset ~/Pictures/bob_esponja_dataset/ --output ./output --grayscale false --filters_config src/filters.yaml --resize_size 512 --window_size 32 --split_factor 0.7
+python3 extract_textures.py --dataset ./bob_esponja_dataset/ --output ./output --grayscale false --filters_config src/filters.yaml --resize_size 512 --window_size 32 --split_factor 0.7
 ```
 
 ### 2. Segmentação por Textura

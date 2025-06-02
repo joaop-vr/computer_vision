@@ -3,6 +3,7 @@ from PIL import Image
 from torch.utils.data import Dataset
 import numpy as np
 from glob import glob
+import torch
 
 class CustomDataset(Dataset):
     def __init__(self, image_folder, mask_folder, transform=None):

@@ -27,6 +27,9 @@ class CustomDataset(Dataset):
             augmentations = self.transform(image=image, mask=mask)
             image = augmentations['image']
             mask = augmentations['mask']
+        else:
+            image = torch.from_numpy(image).permute(2, 0, 1).float() / 255.0
+            mask = torch.from_numpy(mask).long()
 
         return image, mask
         

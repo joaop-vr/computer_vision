@@ -54,7 +54,6 @@ def main(leftImg8bit, gtFine, output_dir, device):
     model.to(device)
 
     best_val_loss = float('inf')
-
     for epoch in range(NUM_EPOCHS):
         model.train()
         train_loss = 0.0
@@ -72,8 +71,6 @@ def main(leftImg8bit, gtFine, output_dir, device):
 
             train_loss += loss.item()
 
-            if batch_idx % 10 == 0:
-                print(f"Epoch [{epoch+1}/{NUM_EPOCHS}], Batch [{batch_idx}/{len(train_dataloader)}], Loss: {loss.item():.4f}")
         train_loss /= len(train_dataloader)
 
         model.eval()
@@ -83,7 +80,6 @@ def main(leftImg8bit, gtFine, output_dir, device):
                 masks = masks.to(device)
                 outputs = model(images)
                 loss = loss_fn(outputs, masks.long())
-                print(f"Validation Loss: {loss.item():.4f}")
                 val_loss += loss.item()
 
         val_loss /= len(val_dataloader)

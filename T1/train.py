@@ -15,7 +15,7 @@ TRAIN_BATCH_SIZE = 1
 def main(leftImg8bit, gtFine, output_dir, device):
     device = f"cuda:{device}"
 
-    transform_image = A.Compose([
+    transform = A.Compose([
         A.Resize(height=IMAGE_HEIGHT, width=IMAGE_WIDTH),
         A.Normalize(mean=(0.0, 0.0, 0.0), std=(1.0, 1.0, 1.0)),
         A.pytorch.ToTensorV2()
@@ -24,19 +24,13 @@ def main(leftImg8bit, gtFine, output_dir, device):
     train_dataset = CustomDataset(
         image_folder=leftImg8bit + "train",
         mask_folder=gtFine + "train",
-        transform=transform_image
+        transform=transform
     )
 
     val_dataset = CustomDataset(
         image_folder=leftImg8bit + "val",
         mask_folder=gtFine + "val",
-        transform=None
-    )
-
-    test_dataset = CustomDataset(
-        image_folder=leftImg8bit + "test",
-        mask_folder=gtFine + "test",
-        transform=None
+        transform=transform
     )
 
     train_dataloader = torch.utils.data.DataLoader(
@@ -45,15 +39,10 @@ def main(leftImg8bit, gtFine, output_dir, device):
         shuffle=True,
         num_workers=8
     )
+    
     val_dataloader = torch.utils.data.DataLoader(
         val_dataset,
-        batch_size=64,
-        shuffle=False,
-        num_workers=8
-    )
-    test_dataloader = torch.utils.data.DataLoader(
-        test_dataset,
-        batch_size=64,
+        batch_size=1,
         shuffle=False,
         num_workers=8
     )

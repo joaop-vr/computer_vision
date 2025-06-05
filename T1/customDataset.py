@@ -6,13 +6,13 @@ from glob import glob
 import torch
 
 class CustomDataset(Dataset):
-    def __init__(self, image_folder, mask_folder, transform=None):
-        self.image_folder = image_folder
-        self.mask_folder = mask_folder
+    def __init__(self, dataset_folder, mode, transform=None):
+        self.dataset_folder = dataset_folder
+        self.mode = mode
         self.transform = transform
 
-        self.images = sorted(glob(f"{image_folder}/**/*.png", recursive=True))
-        self.masks = sorted(glob(f"{mask_folder}/**/*labelIds.png", recursive=True))
+        self.images = sorted(glob(f"{dataset_folder}{mode}/**/*leftImg8bit.png", recursive=True))
+        self.masks = sorted(glob(f"{dataset_folder}{mode}/**/*labelIds.png", recursive=True))
 
     def __len__(self):
         return len(self.masks)

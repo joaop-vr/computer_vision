@@ -12,7 +12,7 @@ IMAGE_WIDTH = 2048
 NUM_EPOCHS = 20
 TRAIN_BATCH_SIZE = 1
 
-def main(leftImg8bit, gtFine, output_dir, device):
+def main(dataset_folder, output_dir, device):
     device = f"cuda:{device}"
 
     transform = A.Compose([
@@ -22,14 +22,14 @@ def main(leftImg8bit, gtFine, output_dir, device):
     ])
 
     train_dataset = CustomDataset(
-        image_folder=leftImg8bit + "train",
-        mask_folder=gtFine + "train",
+        dataset_folder=dataset_folder,
+        mode="train",
         transform=transform
     )
 
     val_dataset = CustomDataset(
-        image_folder=leftImg8bit + "val",
-        mask_folder=gtFine + "val",
+        dataset_folder=dataset_folder,
+        mode="val",
         transform=transform
     )
 
@@ -83,6 +83,8 @@ def main(leftImg8bit, gtFine, output_dir, device):
                 val_loss += loss.item()
 
         val_loss /= len(val_dataloader)
+        
+        print(f"Epoch [{epoch+1}/{NUM_EPOCHS}], Train Loss: {train_loss:.4f}, Val Loss: {val_loss:.4f}")
 
         if val_loss < best_val_loss:
             best_val_loss = val_loss
@@ -90,19 +92,17 @@ def main(leftImg8bit, gtFine, output_dir, device):
             print(f"Saved best model with validation loss: {best_val_loss:.4f}")
 
 if __name__ == "__main__":
-    if len(sys.argv) != 5:
-        print("Usage: python train.py <leftImg8bit> <gtFine> <output_dir> <device>")
+    if len(sys.argv) != 4:
+        print("Usage: python train.py <dataset_folder> <output_dir> <device>")
         sys.exit(1)
     
-    leftImg8bit = sys.argv[1]
-    gtFine = sys.argv[2]
-    output_dir = sys.argv[3]
-    device = sys.argv[4]
+    dataset_folder = sys.argv[1]
+    output_dir = sys.argv[2]
+    device = sys.argv[3]
 
-    leftImg8bit += "/" if not leftImg8bit.endswith('/') else ""
-    gtFine += "/" if not gtFine.endswith('/') else ""
+    dataset_folder += "/" if not dataset_folder.endswith('/') else ""
     output_dir += "/" if not output_dir.endswith('/') else ""
 
     os.makedirs(output_dir, exist_ok=True)
 
-    main(leftImg8bit, gtFine, output_dir, device)
+    main(dataset_folder, output_dir, device)

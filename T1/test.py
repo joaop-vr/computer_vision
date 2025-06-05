@@ -19,7 +19,7 @@ NUM_CLASSES = 34
 SAVE_IMAGES = True
 N_IMAGES_TO_SAVE = 50
 
-def main(leftImg8bit, gtFine, train_dir, device):
+def main(dataset_folder, train_dir, device):
     global N_IMAGES_TO_SAVE
     device = f"cuda:{device}"
 
@@ -30,8 +30,8 @@ def main(leftImg8bit, gtFine, train_dir, device):
     ])
 
     test_dataset = CustomDataset(
-        image_folder=leftImg8bit + "val",
-        mask_folder=gtFine + "val",
+        dataset_folder=dataset_folder,
+        mode="test",
         transform=transform
     )
 
@@ -117,21 +117,19 @@ def main(leftImg8bit, gtFine, train_dir, device):
             f.write(f"Class {i}: {iou_per_class[i].item():.4f}\n")
 
 if __name__ == "__main__":
-    if len(sys.argv) != 5:
-        print("Usage: python train.py <leftImg8bit> <gtFine> <train_dir> <device>")
+    if len(sys.argv) != 4:
+        print("Usage: python train.py <dataset_folder> <train_dir> <device>")
         sys.exit(1)
     
-    leftImg8bit = sys.argv[1]
-    gtFine = sys.argv[2]
-    train_dir = sys.argv[3]
-    device = sys.argv[4]
+    dataset_folder = sys.argv[1]
+    train_dir = sys.argv[2]
+    device = sys.argv[3]
 
-    leftImg8bit += "/" if not leftImg8bit.endswith('/') else ""
-    gtFine += "/" if not gtFine.endswith('/') else ""
+    dataset_folder += "/" if not dataset_folder.endswith('/') else ""
     train_dir += "/" if not train_dir.endswith('/') else ""
 
     if not os.path.exists(train_dir):
         print(f"Training directory {train_dir} does not exist.")
         exit(1)
 
-    main(leftImg8bit, gtFine, train_dir, device)
+    main(dataset_folder, train_dir, device)

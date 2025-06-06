@@ -1,14 +1,12 @@
 import torch
 import sys
-import torchvision
 import os
 import numpy as np
 import albumentations as A
 from PIL import Image
-import random
 
-from model import UNET
-from customDataset import CustomDataset
+from models.model_original import UNET
+from src.customDataset import CustomDataset
 
 IMAGE_HEIGHT = 1024
 IMAGE_WIDTH = 2048

@@ -1,10 +1,9 @@
 import torch
 import sys
-import torchvision
 import os
 
-from model import UNET
-from customDataset import CustomDataset
+from models.model_original import UNET
+from src.customDataset import CustomDataset
 import albumentations as A
 
 IMAGE_HEIGHT = 1024

@@ -42,22 +42,23 @@ def getOutputName(dest_dir):
     return json_output
 
 class KNN:
-    def __init__(self, x_train_scaled, x_test_scaled, y_train, y_test): 
+    def __init__(self, x_train_scaled, x_test_scaled, y_train, y_test, distance_metric): 
         self.x_train = x_train_scaled
         self.x_test = x_test_scaled
         self.y_train = y_train
         self.y_test = y_test
+        self.distance_metric = distance_metric
 
     def knn(self, n: int, json_obj: dict):
-        knn = KNeighborsClassifier(n_neighbors = n)
+        knn = KNeighborsClassifier(n_neighbors=n, metric=self.distance_metric)
         knn.fit(self.x_train, self.y_train)
 
         y_pred = knn.predict(self.x_test)
 
         acc = accuracy_score(self.y_test, y_pred)
 
-        print("Accuracy: ", acc)
-        print("\nClassification Report:\n", classification_report(self.y_test, y_pred))
+        # print("Accuracy: ", acc)
+        # print("\nClassification Report:\n", classification_report(self.y_test, y_pred))
 
         json_obj['accuracy'] = acc
 
@@ -79,42 +80,35 @@ def main():
 
     N = config.get('neighbors')
     sizes = config.get('test_size')
-    states = config.get('random_state')
+    distance_metric = config.get('distance_metric')
 
     idx = 0
     for test_size in sizes:
-        for random_state in states:
-            if random_state:
-                x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=test_size, random_state=42)
-            else:
-                x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=test_size)
-            x_train_scaled = scaler.fit_transform(x_train)
-            x_test_scaled = scaler.fit_transform(x_test)
+        x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=test_size)
+        x_train_scaled = scaler.fit_transform(x_train)
+        x_test_scaled = scaler.fit_transform(x_test)
 
-            # KNN
-
-            knn = KNN(x_train_scaled, x_test_scaled, y_train, y_test)
+        ##### KNN
+        for distance_m in distance_metric:
+            knn = KNN(x_train_scaled, x_test_scaled, y_train, y_test, distance_m)
             for n in N:
-                print(f"Experiment {idx}:\nNeighbors: {n}\n Test Size\n {test_size}\n Random State: {random_state}\n")
+                # print(f"Experiment {idx}:\nNeighbors: {n}\n Test Size\n {test_size}\n Distance Metric: {distance_m}\n")
 
-                json_obj['KNN'][f'{n}, {test_size}, {random_state}'] = {
-                        'accuracy': None
-                        }
+                json_obj['KNN'][f'{n}, {test_size} {distance_m}'] = {'accuracy': None}
 
-                knn.knn(n, json_obj['KNN'][f'{n}, {test_size}, {random_state}'])
+                knn.knn(n, json_obj['KNN'][f'{n}, {test_size} {distance_m}'])
                 idx += 1
 
-            # LINEAR
+        ##### LINEAR
 
-            json_obj['Linear'] = {}
+        clf = SGDClassifier()
+        clf.fit(x_train_scaled, y_train)
 
-            clf = SGDClassifier(random_state=42)
-            clf.fit(x_train_scaled, y_train)
+        y_pred = clf.predict(x_test_scaled)
+        acc = accuracy_score(y_test, y_pred)
 
-            y_pred = clf.predict(x_test_scaled)
-            acc = accuracy_score(y_test, y_pred)
-
-            json_obj['Linear']['accuracy'] = acc
+        json_obj[f'Linear {str(test_size)}'] = {}
+        json_obj[f'Linear {str(test_size)}']['accuracy'] = acc
 
     json_out = json.dumps(json_obj, indent=4)
     with open(json_output, 'w') as file:

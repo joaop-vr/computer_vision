@@ -1,3 +1,4 @@
-neighbors: 3
-test_size: 0.2
-random_state: True
+dest_dir: '/home/helo/Results/TA4/'
+neighbors: [1, 2, 3, 4, 5]
+test_size: [0.1, 0.2, 0.3]
+random_state: [True, False]

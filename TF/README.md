@@ -7,6 +7,7 @@ Este repositório contém a implementação de um modelo de segmentação semân
 T1/
 ├── models/
 │   └── model_original.py     # Implementação da arquitetura UNET
+├── results/                  # Coletânia de resultados obtidos
 ├── src/
 │   └── customDataset.py      # Classe personalizada para carregamento do dataset
 ├── tools/
